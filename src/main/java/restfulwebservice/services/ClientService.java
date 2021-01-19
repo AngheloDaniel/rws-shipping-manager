@@ -7,6 +7,7 @@ import restfulwebservice.model.Client;
 import restfulwebservice.repositories.ClientRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClientService {
@@ -25,5 +26,8 @@ public class ClientService {
             System.out.println("Exception: " + e.getMessage());
         }
 
+    }
+    public Optional<Client> findClientById(Long id) {
+        return clientRepository.findById(id);
     }
 }
