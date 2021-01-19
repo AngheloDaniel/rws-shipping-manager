@@ -1,9 +1,8 @@
 package restfulwebservice.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import restfulwebservice.model.Client;
 import restfulwebservice.services.ClientService;
 
@@ -15,13 +14,10 @@ public class ClientController {
     @Autowired
     ClientService clientService;
 
-    @RequestMapping("/clients")
-    public void getClients() {
-        List<Client> clients = clientService.list();
-
-        for (Client client: clients) {
-            System.out.println(client.getName());
-        }
+    @GetMapping("/clients")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Client> getClients() {
+        return clientService.list();
     }
 
     @RequestMapping("getClient")
@@ -29,11 +25,16 @@ public class ClientController {
         return "This is the super client 3";
     }
 
-    @GetMapping("/v0.1/clients/insert")
-    public String insertClient() {
+    /**
+     * Create client
+     */
+    @PostMapping("/1.0/clients")
+    @ResponseStatus(HttpStatus.OK)
+    public Client insertClient(
+            @RequestParam(value = "name") String name) {
         Client client = new Client();
-        client.setName("Daniel Pérez");
+        client.setName(name);
         clientService.insert(client);
-        return "Cliente creado";
+        return client;
     }
 }
