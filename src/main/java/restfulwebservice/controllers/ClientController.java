@@ -16,23 +16,35 @@ public class ClientController {
     @Autowired
     ClientService clientService;
 
-    @GetMapping("/clients")
+    /**
+     * Get a list of all the clients
+     * @return List<Client>
+     */
+    @GetMapping("/1.0/clients/list")
     @ResponseStatus(HttpStatus.OK)
     public List<Client> getClients() {
         return clientService.list();
     }
 
-    @GetMapping("/v1.0/clients")
+    /**
+     *
+     * @param id
+     * @return Client
+     */
+    @GetMapping("/1.0/clients")
     public Optional<Client> getClientById(@RequestParam(value = "id") Long id){
         return clientService.findClientById(id);
     }
 
     /**
      * Create client
+     * @return ResponseEntity
      */
-    @PostMapping("/v1.0/clients")
+    @PostMapping("/1.0/clients/create")
     public ResponseEntity<Client> insertClient(
-            @RequestBody Client client) {
+            @RequestParam(value = "name") String name) {
+        Client client = new Client();
+        client.setName(name);
         clientService.insert(client);
         return ResponseEntity.ok(client);
     }
